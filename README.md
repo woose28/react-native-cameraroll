@@ -175,6 +175,7 @@ Returns a Promise with a list of albums
 Array of `Album` object
   * title: {string}
   * count: {number}
+  * albumType: {string} (iOS only)
 
 ---
 
@@ -207,6 +208,10 @@ Returns a Promise with photo identifier objects from the local camera roll of th
   * `All`
   * `Videos`
   * `Photos` // default
+*  `albumTypes` : {string} : Specifies which album types to filter the results to (iOS only). Valid values are:
+  * `All`
+  * `SmartAlbum`
+  * `UserAlbum`
 * `mimeTypes` : {Array} : Filter by mimetype (e.g. image/jpeg). Note that using this will reduce performance slightly on iOS.
 * `fromTime` : {number} : Filter by creation time with a timestamp in milliseconds. This time is exclusive, so we'll select all photos with `timestamp > fromTime`.
 * `toTime` : {number} : Filter by creation time with a timestamp in milliseconds. This time is inclusive, so we'll select all photos with `timestamp <= toTime`.

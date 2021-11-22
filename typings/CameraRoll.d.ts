@@ -17,6 +17,8 @@ declare namespace CameraRoll {
 
   type AssetType = 'All' | 'Videos' | 'Photos';
 
+  type AlbumType = 'All' | 'SmartAlbum' | 'UserAlbum';
+
   type Include =
     /** Ensures the filename is included. Has a large performance hit on iOS */
     | 'filename'
@@ -62,6 +64,11 @@ declare namespace CameraRoll {
      * Specifies filter on asset type
      */
     assetType?: AssetType;
+
+    /**
+     * Specifies which album types to filter the results to.
+     */
+    albumTypes?: AlbumType;
 
     /**
      * Filter by creation time with a timestamp in milliseconds. This time is
@@ -137,6 +144,7 @@ declare namespace CameraRoll {
   interface Album {
     title: string;
     count: number;
+    albumType: string | undefined;
   }
 
   type SaveToCameraRollOptions = {

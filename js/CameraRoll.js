@@ -29,6 +29,12 @@ const ASSET_TYPE_OPTIONS = {
   Photos: 'Photos',
 };
 
+const ALBUM_TYPE_OPTIONS = {
+  All: 'All',
+  SmartAlbum: 'SmartAlbum',
+  UserAlbum: 'UserAlbum',
+};
+
 export type GroupTypes = $Keys<typeof GROUP_TYPES_OPTIONS>;
 
 export type Include =
@@ -69,6 +75,11 @@ export type GetPhotosParams = {
    * Specifies filter on asset type
    */
   assetType?: $Keys<typeof ASSET_TYPE_OPTIONS>,
+
+  /**
+   * Specifies which album types to filter the results to.
+   */
+  albumTypes?: $Keys<typeof ALBUM_TYPE_OPTIONS>,
 
   /**
    * Earliest time to get photos from. A timestamp in milliseconds. Exclusive.
@@ -122,9 +133,7 @@ export type PhotoIdentifiersPage = {
     start_cursor?: string,
     end_cursor?: string,
   },
-  limited?: boolean,
 };
-
 export type SaveToCameraRollOptions = {
   type?: 'photo' | 'video' | 'auto',
   album?: string,
@@ -137,6 +146,7 @@ export type GetAlbumsParams = {
 export type Album = {
   title: string,
   count: number,
+  albumType: string | undefined,
 };
 
 /**
@@ -147,6 +157,7 @@ export type Album = {
 class CameraRoll {
   static GroupTypesOptions = GROUP_TYPES_OPTIONS;
   static AssetTypeOptions = ASSET_TYPE_OPTIONS;
+  static AlbumTypeOptions = ALBUM_TYPE_OPTIONS;
 
   /**
    * `CameraRoll.saveImageWithTag()` is deprecated. Use `CameraRoll.saveToCameraRoll()` instead.
