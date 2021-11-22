@@ -208,7 +208,7 @@ Returns a Promise with photo identifier objects from the local camera roll of th
   * `All`
   * `Videos`
   * `Photos` // default
-*  `albumTypes` : {string} : Specifies which album types to filter the results to (iOS only). Valid values are:
+* `albumTypes` : {string} : Specifies which album types to filter the results to (iOS only). Valid values are:
   * `All`
   * `SmartAlbum`
   * `UserAlbum`
