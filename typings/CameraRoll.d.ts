@@ -144,6 +144,7 @@ declare namespace CameraRoll {
   interface Album {
     title: string;
     count: number;
+    thumbnail: string;
     albumType: string | undefined;
   }
 

@@ -435,7 +435,7 @@ public class CameraRollModule extends ReactContextBaseJavaModule {
       return;
     }
 
-    final String[] projection = {MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME};
+    final String[] projection = {MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME, MediaStore.Images.Media.DATA};
 
     try {
       Cursor media = getReactApplicationContext().getContentResolver().query(
@@ -443,34 +443,41 @@ public class CameraRollModule extends ReactContextBaseJavaModule {
               projection,
               selection.toString(),
               selectionArgs.toArray(new String[selectionArgs.size()]),
-              null);
+              MediaStore.Images.ImageColumns.DATE_ADDED + " DESC");
       if (media == null) {
         promise.reject(ERROR_UNABLE_TO_LOAD, "Could not get media");
       } else {
         WritableArray response = new WritableNativeArray();
         try {
           if (media.moveToFirst()) {
-            Map<String, Integer> albums = new HashMap<>();
+            Map<String, AlbumInfo> albums = new HashMap<>();
             do {
               int column = media.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME);
-              if ( column < 0 ) {
+              int dataColumn = media.getColumnIndex(MediaStore.Images.Media.DATA);
+
+              if ( column < 0 || dataColumn < 0) {
                 throw new IndexOutOfBoundsException();
               }
               String albumName = media.getString(column);
+              Uri photoUri = Uri.parse("file://" + media.getString(dataColumn));
+              
               if (albumName != null) {
-                Integer albumCount = albums.get(albumName);
-                if (albumCount == null) {
-                  albums.put(albumName, 1);
+                AlbumInfo albumInfo = albums.get(albumName);
+                if (albumInfo == null) {
+                  albums.put(albumName, new AlbumInfo(1, photoUri.toString()));
                 } else {
-                  albums.put(albumName, albumCount + 1);
+                  albumInfo.increaseCount();
                 }
               }
             } while (media.moveToNext());
 
-            for (Map.Entry<String, Integer> albumEntry : albums.entrySet()) {
+            for (Map.Entry<String, AlbumInfo> albumEntry : albums.entrySet()) {
               WritableMap album = new WritableNativeMap();
+              
+              AlbumInfo albumInfo = albumEntry.getValue();
               album.putString("title", albumEntry.getKey());
-              album.putInt("count", albumEntry.getValue());
+              album.putInt("count", albumInfo.getCount());
+              album.putString("thumbnail", albumInfo.getThumbnail());
               response.pushMap(album);
             }
           }
@@ -481,6 +488,28 @@ public class CameraRollModule extends ReactContextBaseJavaModule {
       }
     } catch (Exception e) {
       promise.reject(ERROR_UNABLE_TO_LOAD, "Could not get media", e);
+    }
+  }
+
+  private static class AlbumInfo {
+    private int count;
+    private String thumbnail;
+
+    private AlbumInfo(int count, String thumbnail) {
+      this.count = count;
+      this.thumbnail = thumbnail;
+    }
+
+    public int getCount() {
+      return this.count;
+    }
+
+    public String getThumbnail() {
+      return this.thumbnail;
+    }
+
+    public void increaseCount() {
+      this.count += 1;
     }
   }
 

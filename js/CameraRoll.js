@@ -146,6 +146,7 @@ export type GetAlbumsParams = {
 export type Album = {
   title: string,
   count: number,
+  thumbnail: string,
   albumType: string | undefined,
 };
 

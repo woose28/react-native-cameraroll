@@ -175,6 +175,7 @@ Returns a Promise with a list of albums
 Array of `Album` object
   * title: {string}
   * count: {number}
+  * thumbnail: {string}
   * albumType: {string} (iOS only)
 
 ---
