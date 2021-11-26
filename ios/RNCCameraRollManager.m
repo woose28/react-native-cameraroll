@@ -228,7 +228,7 @@ RCT_EXPORT_METHOD(getAlbums:(NSDictionary *)params
       [result addObject:@{
         @"title": [obj localizedTitle],
         @"count": @(assetsFetchResult.count),
-        @"thumbnail": [NSString stringWithFormat:@"ph://%@", [assetsFetchResult.firstObject localIdentifier]],
+        @"thumbnail": [NSString stringWithFormat:@"ph://%@", [assetsFetchResult.lastObject localIdentifier]],
         @"albumType": @"SmartAlbum"
       }];
     }
@@ -244,7 +244,7 @@ RCT_EXPORT_METHOD(getAlbums:(NSDictionary *)params
       [result addObject:@{
         @"title": [obj localizedTitle],
         @"count": @(assetsFetchResult.count),
-        @"thumbnail": [NSString stringWithFormat:@"ph://%@", [assetsFetchResult.firstObject localIdentifier]],
+        @"thumbnail": [NSString stringWithFormat:@"ph://%@", [assetsFetchResult.lastObject localIdentifier]],
         @"albumType": @"UserAlbum"
       }];
     }
